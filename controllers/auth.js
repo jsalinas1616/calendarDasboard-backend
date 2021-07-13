@@ -1,6 +1,7 @@
 const { response } = require("express");
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
+const { createJWT } = require("../helpers/jwt");
 
 const addUser = async (req, res = resonse) => {
   // const { name, email, password } = req.body;
@@ -16,7 +17,7 @@ const addUser = async (req, res = resonse) => {
         msg: "El usuario ya existe",
       });
     }
-    console.log(userCheck);
+
     user = new User(req.body);
 
     //encrpyt password
@@ -24,6 +25,18 @@ const addUser = async (req, res = resonse) => {
     user.password = bcrypt.hashSync(password, salt);
 
     await user.save();
+
+    // create JWT
+
+    const token = await createJWT(user.uid, user.name);
+
+    res.status(201).json({
+      ok: true,
+      uid: user.id,
+      name: user.name,
+      token,
+      msg: "registro existoso",
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -31,13 +44,6 @@ const addUser = async (req, res = resonse) => {
       msg: "hubo un error, habla con el administrador",
     });
   }
-
-  res.status(201).json({
-    ok: true,
-    uid: user.id,
-    name: user.name,
-    msg: "Registro existo",
-  });
 };
 
 const loginUser = async (req, res = resonse) => {
@@ -55,12 +61,14 @@ const loginUser = async (req, res = resonse) => {
         msg: "Usuario o contraseña no existe o no es correcto",
       });
     }
-    // Genera nuestro JWT
+    // create JWT us
+    const token = await createJWT(userFind._id, userFind.name);
 
     res.json({
       ok: true,
-      uid: userFind.id,
+      uid: userFind._id,
       name: userFind.name,
+      token,
     });
 
     const validPassword = bcrypt.compareSync(password, userFind.password);
@@ -79,15 +87,18 @@ const loginUser = async (req, res = resonse) => {
   }
 };
 
-const validateToken = (req, res = resonse) => {
+const revalidateToken = async (req, res = resonse) => {
+  const { uid, name } = req;
+  const token = await createJWT(uid, name);
+
   res.json({
     ok: true,
-    msg: "token",
+    token,
   });
 };
 
 module.exports = {
   addUser,
   loginUser,
-  validateToken,
+  revalidateToken,
 };
