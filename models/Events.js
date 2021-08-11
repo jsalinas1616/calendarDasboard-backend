@@ -23,6 +23,6 @@ const EventSchema = Schema({
     required: true,
   },
 });
-
+// cambiamos la importacion a mayuscula para que no chocque con heroku
 //3rd parameter 'Event': as collection name
 module.exports = model('Event', EventSchema, 'event');

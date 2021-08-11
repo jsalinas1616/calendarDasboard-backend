@@ -1,7 +1,7 @@
-const express = require("express");
-require("dotenv").config();
-const cors = require("cors");
-const { dbConnection } = require("./db/config");
+const express = require('express');
+require('dotenv').config();
+const cors = require('cors');
+const { dbConnection } = require('./db/config');
 
 // crear el servidor de express
 const app = express();
@@ -13,14 +13,14 @@ dbConnection();
 app.use(cors());
 
 // Directorio Publico
-app.use(express.static("public"));
+app.use(express.static('public'));
 
 // Lectura y parseo del body antes body parser
 app.use(express.json());
 
 //Rutas
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/events", require("./routes/events"));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/events', require('./routes/events'));
 
 // Escuchar peticiones
 app.listen(process.env.PORT, () => {
