@@ -4,8 +4,6 @@ const User = require('../models/User');
 const { createJWT } = require('../helpers/jwt');
 
 const addUser = async (req, res = response) => {
-  // const { name, email, password } = req.body;
-
   const { name, email, password } = req.body;
 
   try {
