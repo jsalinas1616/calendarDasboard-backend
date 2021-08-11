@@ -1,7 +1,7 @@
-const { response } = require("express");
-const bcrypt = require("bcryptjs");
-const User = require("../models/User");
-const { createJWT } = require("../helpers/jwt");
+const { response } = require('express');
+const bcrypt = require('bcryptjs');
+const User = require('../models/User');
+const { createJWT } = require('../helpers/jwt');
 
 const addUser = async (req, res = response) => {
   // const { name, email, password } = req.body;
@@ -14,7 +14,7 @@ const addUser = async (req, res = response) => {
     if (userCheck) {
       return res.status(400).json({
         ok: false,
-        msg: "El usuario ya existe",
+        msg: 'El usuario ya existe',
       });
     }
 
@@ -35,13 +35,13 @@ const addUser = async (req, res = response) => {
       uid: user.id,
       name: user.name,
       token,
-      msg: "registro existoso",
+      msg: 'registro existoso',
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       ok: false,
-      msg: "hubo un error, habla con el administrador",
+      msg: 'hubo un error, habla con el administrador',
     });
   }
 };
@@ -52,13 +52,13 @@ const loginUser = async (req, res = resonse) => {
   try {
     let userFind = await User.findOne({ email });
 
-    console.log("El userFind es igual a:");
+    console.log('El userFind es igual a:');
     console.log(userFind);
 
     if (!userFind) {
       return res.status(400).json({
         ok: false,
-        msg: "Usuario o contraseña no existe o no es correcto",
+        msg: 'Usuario o contraseña no existe o no es correcto',
       });
     }
     // create JWT us
@@ -75,14 +75,14 @@ const loginUser = async (req, res = resonse) => {
     if (!validPassword) {
       return res.status(400).json({
         ok: false,
-        msg: "Usuario o contraseña no existe o no es correcto",
+        msg: 'Usuario o contraseña no existe o no es correcto',
       });
     }
   } catch (error) {
     console.log(error);
     return res.status(500).json({
       ok: false,
-      msg: "Hubo un error, habla con el administrador",
+      msg: 'Hubo un error, habla con el administrador',
     });
   }
 };
