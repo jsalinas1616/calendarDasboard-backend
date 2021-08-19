@@ -48,6 +48,9 @@ const loginUser = async (req, res = resonse) => {
   const { password, email } = req.body;
 
   try {
+    console.log(
+      `Desde en Backend Este es el Email, ${email}, este es el password ${password}`
+    );
     let userFind = await User.findOne({ email });
 
     console.log('El userFind es igual a:');
@@ -92,6 +95,8 @@ const revalidateToken = async (req, res = resonse) => {
   res.json({
     ok: true,
     token,
+    uid,
+    name,
   });
 };
 
